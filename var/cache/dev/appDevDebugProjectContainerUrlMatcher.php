@@ -107,6 +107,21 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
+        // client_planning_homepage
+        if ('' === $trimmedPathinfo) {
+            $ret = array (  '_controller' => 'Client\\PlanningBundle\\Controller\\DefaultController::indexAction',  '_route' => 'client_planning_homepage',);
+            if ('/' === substr($pathinfo, -1)) {
+                // no-op
+            } elseif ('GET' !== $canonicalMethod) {
+                goto not_client_planning_homepage;
+            } else {
+                return array_replace($ret, $this->redirect($rawPathinfo.'/', 'client_planning_homepage'));
+            }
+
+            return $ret;
+        }
+        not_client_planning_homepage:
+
         // homepage
         if ('' === $trimmedPathinfo) {
             $ret = array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);

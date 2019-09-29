@@ -196,6 +196,6 @@ class __TwigTemplate_6f4e485d6d8728018272ff99944a73d2f28635edd1e17b6122519dd03a0
         })|raw }}
     </div>
 {% endif %}
-", "@Twig/Exception/trace.html.twig", "/var/www/html/GPCI/vendor/symfony/symfony/src/Symfony/Bundle/TwigBundle/Resources/views/Exception/trace.html.twig");
+", "@Twig/Exception/trace.html.twig", "/var/www/html/SIO/PPE3/GPCI_2/GPCI/vendor/symfony/symfony/src/Symfony/Bundle/TwigBundle/Resources/views/Exception/trace.html.twig");
     }
 }

@@ -179,6 +179,6 @@ class __TwigTemplate_976c4876dcae047896af8c4a8ed523b39ea9a48eb3a7dc105e3792a4e15
         {% block javascripts %}{% endblock %}
     </body>
 </html>
-", "base.html.twig", "/var/www/html/GPCI/app/Resources/views/base.html.twig");
+", "base.html.twig", "/var/www/html/SIO/PPE3/GPCI_2/GPCI/app/Resources/views/base.html.twig");
     }
 }

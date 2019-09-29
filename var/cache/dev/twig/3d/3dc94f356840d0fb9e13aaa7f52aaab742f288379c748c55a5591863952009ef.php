@@ -220,6 +220,6 @@ class __TwigTemplate_cd7851da34fbcba6bd1f226f7bf62aed10d5058fe12fffa3db327dbdee9
         </div>
     {% endif %}
 {% endblock %}
-", "@WebProfiler/Collector/exception.html.twig", "/var/www/html/GPCI/vendor/symfony/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views/Collector/exception.html.twig");
+", "@WebProfiler/Collector/exception.html.twig", "/var/www/html/SIO/PPE3/GPCI_2/GPCI/vendor/symfony/symfony/src/Symfony/Bundle/WebProfilerBundle/Resources/views/Collector/exception.html.twig");
     }
 }

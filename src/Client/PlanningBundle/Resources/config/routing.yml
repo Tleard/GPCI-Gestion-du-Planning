@@ -1,0 +1,3 @@
+client_planning_homepage:
+    path:     /
+    defaults: { _controller: ClientPlanningBundle:Default:index }

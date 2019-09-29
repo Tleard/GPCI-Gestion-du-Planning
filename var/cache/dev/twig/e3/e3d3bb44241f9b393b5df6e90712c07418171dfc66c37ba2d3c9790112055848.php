@@ -838,6 +838,6 @@ class __TwigTemplate_6e00a484414d44d1860fec3d1dceac29307d1458449eaacc18bb1e26f9e
         {% endif %}
     {% endfor %}
 {% endblock %}
-", "@Swiftmailer/Collector/swiftmailer.html.twig", "/var/www/html/GPCI/vendor/symfony/swiftmailer-bundle/Resources/views/Collector/swiftmailer.html.twig");
+", "@Swiftmailer/Collector/swiftmailer.html.twig", "/var/www/html/SIO/PPE3/GPCI_2/GPCI/vendor/symfony/swiftmailer-bundle/Resources/views/Collector/swiftmailer.html.twig");
     }
 }
