@@ -182,6 +182,6 @@ class __TwigTemplate_512335ecd5ff75768f1f0e6dea256cab6418fbc613b79effb4eebe04bfd
         </div>
     </div>
 </div>
-", "@Twig/Exception/traces.html.twig", "/var/www/html/SIO/PPE3/GPCI_2/GPCI/vendor/symfony/symfony/src/Symfony/Bundle/TwigBundle/Resources/views/Exception/traces.html.twig");
+", "@Twig/Exception/traces.html.twig", "/var/www/html/SIO/PPE3/GPCI-Gestion-du-Planning/vendor/symfony/symfony/src/Symfony/Bundle/TwigBundle/Resources/views/Exception/traces.html.twig");
     }
 }
