@@ -15,6 +15,7 @@ use Twig\Node\Expression\AssignNameExpression;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\Expression\NameExpression;
 use Twig\Node\ForNode;
+use Twig\Node\IfNode;
 use Twig\Node\Node;
 use Twig\Node\PrintNode;
 use Twig\Test\NodeTestCase;
@@ -36,7 +37,7 @@ class ForTest extends NodeTestCase
         $this->assertEquals($valueTarget, $node->getNode('value_target'));
         $this->assertEquals($seq, $node->getNode('seq'));
         $this->assertTrue($node->getAttribute('ifexpr'));
-        $this->assertInstanceOf('\Twig\Node\IfNode', $node->getNode('body'));
+        $this->assertInstanceOf(IfNode::class, $node->getNode('body'));
         $this->assertEquals($body, $node->getNode('body')->getNode('tests')->getNode(1)->getNode(0));
         $this->assertFalse($node->hasNode('else'));
 

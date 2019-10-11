@@ -11,14 +11,16 @@ namespace Twig\Tests;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
 use Twig\Compiler;
 use Twig\Environment;
+use Twig\Loader\LoaderInterface;
 
-class CompilerTest extends \PHPUnit\Framework\TestCase
+class CompilerTest extends TestCase
 {
     public function testReprNumericValueWithLocale()
     {
-        $compiler = new Compiler(new Environment($this->createMock('\Twig\Loader\LoaderInterface')));
+        $compiler = new Compiler(new Environment($this->createMock(LoaderInterface::class)));
 
         $locale = setlocale(LC_NUMERIC, 0);
         if (false === $locale) {

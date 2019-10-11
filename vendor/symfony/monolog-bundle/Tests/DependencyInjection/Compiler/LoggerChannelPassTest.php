@@ -82,6 +82,28 @@ class LoggerChannelPassTest extends TestCase
         $this->assertEquals('monolog.logger.test', (string) $dummyService->getArgument(0));
     }
 
+    public function testAutowiredLoggerArgumentsAreReplacedWithChannelLoggerWhenAutoconfigured()
+    {
+        if (!\method_exists('Symfony\Component\DependencyInjection\Definition', 'getBindings')) {
+            $this->markTestSkipped('Need DependencyInjection 3.4+ to autowire channel logger.');
+        }
+
+        $container = $this->getFunctionalContainer();
+
+        $container->registerForAutoconfiguration('Symfony\Bundle\MonologBundle\Tests\DependencyInjection\Compiler\DummyService')
+            ->setProperty('fake', 'dummy');
+
+        $container->register('dummy_service', 'Symfony\Bundle\MonologBundle\Tests\DependencyInjection\Compiler\DummyService')
+            ->setAutowired(true)
+            ->setAutoconfigured(true)
+            ->setPublic(true)
+            ->addTag('monolog.logger', array('channel' => 'test'));
+
+        $container->compile();
+
+        $this->assertEquals('monolog.logger.test', (string) $container->getDefinition('dummy_service')->getArgument(0));
+    }
+
     public function testAutowiredLoggerArgumentsAreNotReplacedWithChannelLoggerIfLoggerArgumentIsConfiguredExplicitly()
     {
         if (!\method_exists('Symfony\Component\DependencyInjection\Definition', 'getBindings')) {
@@ -110,6 +132,17 @@ class LoggerChannelPassTest extends TestCase
         $container->compile();
 
         $this->assertEquals(array(), $dummyService->getArguments());
+    }
+
+    public function testChannelsConfigurationOptionSupportsAppChannel()
+    {
+        $container = $this->getFunctionalContainer();
+
+        $container->setParameter('monolog.additional_channels', array('app'));
+        $container->compile();
+
+        // the test ensures that the validation does not fail (i.e. it does not throw any exceptions)
+        $this->addToAssertionCount(1);
     }
 
     private function getContainer()
@@ -180,6 +213,9 @@ class LoggerChannelPassTest extends TestCase
         return $container;
     }
 
+    /**
+     * @return ContainerBuilder
+     */
     private function getFunctionalContainer()
     {
         $container = new ContainerBuilder();

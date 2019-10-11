@@ -12,6 +12,7 @@ namespace Twig\Tests\Node;
  */
 
 use Twig\Environment;
+use Twig\Loader\LoaderInterface;
 use Twig\Node\Expression\AssignNameExpression;
 use Twig\Node\Expression\ConditionalExpression;
 use Twig\Node\Expression\ConstantExpression;
@@ -44,7 +45,7 @@ class ModuleTest extends NodeTestCase
 
     public function getTests()
     {
-        $twig = new Environment($this->createMock('\Twig\Loader\LoaderInterface'));
+        $twig = new Environment($this->createMock(LoaderInterface::class));
 
         $tests = [];
 
@@ -62,6 +63,7 @@ class ModuleTest extends NodeTestCase
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
+use Twig\Extension\SandboxExtension;
 use Twig\Markup;
 use Twig\Sandbox\SecurityError;
 use Twig\Sandbox\SecurityNotAllowedTagError;
@@ -73,9 +75,14 @@ use Twig\Template;
 /* foo.twig */
 class __TwigTemplate_%x extends \Twig\Template
 {
+    private \$source;
+    private \$macros = [];
+
     public function __construct(Environment \$env)
     {
         parent::__construct(\$env);
+
+        \$this->source = \$this->getSourceContext();
 
         \$this->parent = false;
 
@@ -85,6 +92,7 @@ class __TwigTemplate_%x extends \Twig\Template
 
     protected function doDisplay(array \$context, array \$blocks = [])
     {
+        \$macros = \$this->macros;
         // line 1
         echo "foo";
     }
@@ -96,15 +104,7 @@ class __TwigTemplate_%x extends \Twig\Template
 
     public function getDebugInfo()
     {
-        return array (  30 => 1,);
-    }
-
-    /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
-    public function getSource()
-    {
-        @trigger_error('The '.__METHOD__.' method is deprecated since version 1.27 and will be removed in 2.0. Use getSourceContext() instead.', E_USER_DEPRECATED);
-
-        return \$this->getSourceContext()->getCode();
+        return array (  37 => 1,);
     }
 
     public function getSourceContext()
@@ -127,6 +127,7 @@ EOF
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
+use Twig\Extension\SandboxExtension;
 use Twig\Markup;
 use Twig\Sandbox\SecurityError;
 use Twig\Sandbox\SecurityNotAllowedTagError;
@@ -138,9 +139,14 @@ use Twig\Template;
 /* foo.twig */
 class __TwigTemplate_%x extends \Twig\Template
 {
+    private \$source;
+    private \$macros = [];
+
     public function __construct(Environment \$env)
     {
         parent::__construct(\$env);
+
+        \$this->source = \$this->getSourceContext();
 
         \$this->blocks = [
         ];
@@ -154,8 +160,9 @@ class __TwigTemplate_%x extends \Twig\Template
 
     protected function doDisplay(array \$context, array \$blocks = [])
     {
+        \$macros = \$this->macros;
         // line 2
-        \$context["macro"] = \$this->loadTemplate("foo.twig", "foo.twig", 2)->unwrap();
+        \$macros["macro"] = \$this->macros["macro"] = \$this->loadTemplate("foo.twig", "foo.twig", 2)->unwrap();
         // line 1
         \$this->parent = \$this->loadTemplate("layout.twig", "foo.twig", 1);
         \$this->parent->display(\$context, array_merge(\$this->blocks, \$blocks));
@@ -173,15 +180,7 @@ class __TwigTemplate_%x extends \Twig\Template
 
     public function getDebugInfo()
     {
-        return array (  36 => 1,  34 => 2,  28 => 1,);
-    }
-
-    /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
-    public function getSource()
-    {
-        @trigger_error('The '.__METHOD__.' method is deprecated since version 1.27 and will be removed in 2.0. Use getSourceContext() instead.', E_USER_DEPRECATED);
-
-        return \$this->getSourceContext()->getCode();
+        return array (  43 => 1,  41 => 2,  34 => 1,);
     }
 
     public function getSourceContext()
@@ -201,7 +200,7 @@ EOF
                         2
                     );
 
-        $twig = new Environment($this->createMock('\Twig\Loader\LoaderInterface'), ['debug' => true]);
+        $twig = new Environment($this->createMock(LoaderInterface::class), ['debug' => true]);
         $node = new ModuleNode($body, $extends, $blocks, $macros, $traits, new Node([]), $source);
         $tests[] = [$node, <<<EOF
 <?php
@@ -209,6 +208,7 @@ EOF
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
+use Twig\Extension\SandboxExtension;
 use Twig\Markup;
 use Twig\Sandbox\SecurityError;
 use Twig\Sandbox\SecurityNotAllowedTagError;
@@ -220,6 +220,19 @@ use Twig\Template;
 /* foo.twig */
 class __TwigTemplate_%x extends \Twig\Template
 {
+    private \$source;
+    private \$macros = [];
+
+    public function __construct(Environment \$env)
+    {
+        parent::__construct(\$env);
+
+        \$this->source = \$this->getSourceContext();
+
+        \$this->blocks = [
+        ];
+    }
+
     protected function doGetParent(array \$context)
     {
         // line 2
@@ -228,6 +241,7 @@ class __TwigTemplate_%x extends \Twig\Template
 
     protected function doDisplay(array \$context, array \$blocks = [])
     {
+        \$macros = \$this->macros;
         // line 4
         \$context["foo"] = "foo";
         // line 2
@@ -246,15 +260,7 @@ class __TwigTemplate_%x extends \Twig\Template
 
     public function getDebugInfo()
     {
-        return array (  28 => 2,  26 => 4,  20 => 2,);
-    }
-
-    /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
-    public function getSource()
-    {
-        @trigger_error('The '.__METHOD__.' method is deprecated since version 1.27 and will be removed in 2.0. Use getSourceContext() instead.', E_USER_DEPRECATED);
-
-        return \$this->getSourceContext()->getCode();
+        return array (  43 => 2,  41 => 4,  34 => 2,);
     }
 
     public function getSourceContext()

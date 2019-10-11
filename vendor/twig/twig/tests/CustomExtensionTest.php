@@ -11,21 +11,22 @@ namespace Twig\Tests;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Extension\ExtensionInterface;
+use Twig\Loader\LoaderInterface;
 
-class CustomExtensionTest extends \PHPUnit\Framework\TestCase
+class CustomExtensionTest extends TestCase
 {
     /**
-     * @requires PHP 5.3
      * @dataProvider provideInvalidExtensions
      */
     public function testGetInvalidOperators(ExtensionInterface $extension, $expectedExceptionMessage)
     {
-        $this->expectException('InvalidArgumentException');
+        $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
 
-        $env = new Environment($this->createMock('\Twig\Loader\LoaderInterface'));
+        $env = new Environment($this->createMock(LoaderInterface::class));
         $env->addExtension($extension);
         $env->getUnaryOperators();
     }
@@ -46,10 +47,6 @@ class InvalidOperatorExtension implements ExtensionInterface
     public function __construct($operators)
     {
         $this->operators = $operators;
-    }
-
-    public function initRuntime(Environment $environment)
-    {
     }
 
     public function getTokenParsers()
@@ -77,18 +74,8 @@ class InvalidOperatorExtension implements ExtensionInterface
         return [];
     }
 
-    public function getGlobals()
-    {
-        return [];
-    }
-
     public function getOperators()
     {
         return $this->operators;
-    }
-
-    public function getName()
-    {
-        return __CLASS__;
     }
 }

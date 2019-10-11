@@ -36,6 +36,7 @@ class BlockTest extends NodeTestCase
 // line 1
 public function block_foo(\$context, array \$blocks = [])
 {
+    \$macros = \$this->macros;
     echo "foo";
 }
 EOF

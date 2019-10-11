@@ -12,6 +12,9 @@ namespace Twig\Tests\Node\Expression;
  */
 
 use Twig\Environment;
+use Twig\Error\SyntaxError;
+use Twig\Loader\ArrayLoader;
+use Twig\Loader\LoaderInterface;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\Expression\FilterExpression;
 use Twig\Node\Node;
@@ -34,8 +37,8 @@ class FilterTest extends NodeTestCase
 
     public function getTests()
     {
-        $environment = new Environment($this->createMock('\Twig\Loader\LoaderInterface'));
-        $environment->addFilter(new TwigFilter('bar', 'bar', ['needs_environment' => true]));
+        $environment = new Environment($this->createMock(LoaderInterface::class));
+        $environment->addFilter(new TwigFilter('bar', 'twig_tests_filter_dummy', ['needs_environment' => true]));
         $environment->addFilter(new TwigFilter('barbar', 'Twig\Tests\Node\Expression\twig_tests_filter_barbar', ['needs_context' => true, 'is_variadic' => true]));
 
         $tests = [];
@@ -44,11 +47,7 @@ class FilterTest extends NodeTestCase
         $node = $this->createFilter($expr, 'upper');
         $node = $this->createFilter($node, 'number_format', [new ConstantExpression(2, 1), new ConstantExpression('.', 1), new ConstantExpression(',', 1)]);
 
-        if (\function_exists('mb_get_info')) {
-            $tests[] = [$node, 'twig_number_format_filter($this->env, twig_upper_filter($this->env, "foo"), 2, ".", ",")'];
-        } else {
-            $tests[] = [$node, 'twig_number_format_filter($this->env, strtoupper("foo"), 2, ".", ",")'];
-        }
+        $tests[] = [$node, 'twig_number_format_filter($this->env, twig_upper_filter($this->env, "foo"), 2, ".", ",")'];
 
         // named arguments
         $date = new ConstantExpression(0, 1);
@@ -77,17 +76,15 @@ class FilterTest extends NodeTestCase
         $tests[] = [$node, 'twig_reverse_filter($this->env, "abc", true)'];
 
         // filter as an anonymous function
-        if (\PHP_VERSION_ID >= 50300) {
-            $node = $this->createFilter(new ConstantExpression('foo', 1), 'anonymous');
-            $tests[] = [$node, 'call_user_func_array($this->env->getFilter(\'anonymous\')->getCallable(), ["foo"])'];
-        }
+        $node = $this->createFilter(new ConstantExpression('foo', 1), 'anonymous');
+        $tests[] = [$node, 'call_user_func_array($this->env->getFilter(\'anonymous\')->getCallable(), ["foo"])'];
 
         // needs environment
         $node = $this->createFilter($string, 'bar');
-        $tests[] = [$node, 'bar($this->env, "abc")', $environment];
+        $tests[] = [$node, 'twig_tests_filter_dummy($this->env, "abc")', $environment];
 
         $node = $this->createFilter($string, 'bar', [new ConstantExpression('bar', 1)]);
-        $tests[] = [$node, 'bar($this->env, "abc", "bar")', $environment];
+        $tests[] = [$node, 'twig_tests_filter_dummy($this->env, "abc", "bar")', $environment];
 
         // arbitrary named arguments
         $node = $this->createFilter($string, 'barbar');
@@ -112,7 +109,7 @@ class FilterTest extends NodeTestCase
 
     public function testCompileWithWrongNamedArgumentName()
     {
-        $this->expectException('\Twig\Error\SyntaxError');
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessage('Unknown argument "foobar" for filter "date(format, timezone)" at line 1.');
 
         $date = new ConstantExpression(0, 1);
@@ -126,7 +123,7 @@ class FilterTest extends NodeTestCase
 
     public function testCompileWithMissingNamedArgument()
     {
-        $this->expectException('\Twig\Error\SyntaxError');
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessage('Value for argument "from" is required for filter "replace" at line 1.');
 
         $value = new ConstantExpression(0, 1);
@@ -148,12 +145,15 @@ class FilterTest extends NodeTestCase
 
     protected function getEnvironment()
     {
-        if (\PHP_VERSION_ID >= 50300) {
-            return include 'PHP53/FilterInclude.php';
-        }
+        $env = new Environment(new ArrayLoader([]));
+        $env->addFilter(new TwigFilter('anonymous', function () {}));
 
-        return parent::getEnvironment();
+        return $env;
     }
+}
+
+function twig_tests_filter_dummy()
+{
 }
 
 function twig_tests_filter_barbar($context, $string, $arg1 = null, $arg2 = null, array $args = [])

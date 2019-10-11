@@ -40,23 +40,16 @@ class MacroTest extends NodeTestCase
         ], [], 1);
         $node = new MacroNode('foo', $body, $arguments, 1);
 
-        if (\PHP_VERSION_ID >= 50600) {
-            $declaration = ', ...$__varargs__';
-            $varargs = '$__varargs__';
-        } else {
-            $declaration = '';
-            $varargs = 'func_num_args() > 2 ? array_slice(func_get_args(), 2) : []';
-        }
-
         return [
             [$node, <<<EOF
 // line 1
-public function getfoo(\$__foo__ = null, \$__bar__ = "Foo"$declaration)
+public function macro_foo(\$__foo__ = null, \$__bar__ = "Foo", ...\$__varargs__)
 {
+    \$macros = \$this->macros;
     \$context = \$this->env->mergeGlobals([
         "foo" => \$__foo__,
         "bar" => \$__bar__,
-        "varargs" => $varargs,
+        "varargs" => \$__varargs__,
     ]);
 
     \$blocks = [];
@@ -64,17 +57,11 @@ public function getfoo(\$__foo__ = null, \$__bar__ = "Foo"$declaration)
     ob_start(function () { return ''; });
     try {
         echo "foo";
-    } catch (\Exception \$e) {
-        ob_end_clean();
 
-        throw \$e;
-    } catch (\Throwable \$e) {
+        return ('' === \$tmp = ob_get_contents()) ? '' : new Markup(\$tmp, \$this->env->getCharset());
+    } finally {
         ob_end_clean();
-
-        throw \$e;
     }
-
-    return ('' === \$tmp = ob_get_clean()) ? '' : new Markup(\$tmp, \$this->env->getCharset());
 }
 EOF
             ],

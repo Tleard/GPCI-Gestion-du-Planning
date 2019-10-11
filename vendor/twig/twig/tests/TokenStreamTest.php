@@ -11,10 +11,12 @@ namespace Twig\Tests;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
+use Twig\Error\SyntaxError;
 use Twig\Token;
 use Twig\TokenStream;
 
-class TokenStreamTest extends \PHPUnit\Framework\TestCase
+class TokenStreamTest extends TestCase
 {
     protected static $tokens;
 
@@ -32,18 +34,6 @@ class TokenStreamTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @group legacy
-     */
-    public function testLegacyConstructorSignature()
-    {
-        $stream = new TokenStream([], 'foo', '{{ foo }}');
-        $this->assertEquals('foo', $stream->getFilename());
-        $this->assertEquals('{{ foo }}', $stream->getSource());
-        $this->assertEquals('foo', $stream->getSourceContext()->getName());
-        $this->assertEquals('{{ foo }}', $stream->getSourceContext()->getCode());
-    }
-
     public function testNext()
     {
         $stream = new TokenStream(self::$tokens);
@@ -58,7 +48,7 @@ class TokenStreamTest extends \PHPUnit\Framework\TestCase
 
     public function testEndOfTemplateNext()
     {
-        $this->expectException('\Twig\Error\SyntaxError');
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessage('Unexpected end of template');
 
         $stream = new TokenStream([
@@ -71,7 +61,7 @@ class TokenStreamTest extends \PHPUnit\Framework\TestCase
 
     public function testEndOfTemplateLook()
     {
-        $this->expectException('\Twig\Error\SyntaxError');
+        $this->expectException(SyntaxError::class);
         $this->expectExceptionMessage('Unexpected end of template');
 
         $stream = new TokenStream([

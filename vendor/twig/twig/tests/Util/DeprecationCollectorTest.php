@@ -11,18 +11,20 @@ namespace Twig\Tests\Util;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
 use Twig\Environment;
+use Twig\Loader\LoaderInterface;
 use Twig\TwigFunction;
 use Twig\Util\DeprecationCollector;
 
-class DeprecationCollectorTest extends \PHPUnit\Framework\TestCase
+class DeprecationCollectorTest extends TestCase
 {
     /**
      * @requires PHP 5.3
      */
     public function testCollect()
     {
-        $twig = new Environment($this->createMock('\Twig\Loader\LoaderInterface'));
+        $twig = new Environment($this->createMock(LoaderInterface::class));
         $twig->addFunction(new TwigFunction('deprec', [$this, 'deprec'], ['deprecated' => true]));
 
         $collector = new DeprecationCollector($twig);

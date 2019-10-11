@@ -11,6 +11,7 @@ namespace Twig\Tests;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Error\Error;
 use Twig\Error\RuntimeError;
@@ -18,7 +19,7 @@ use Twig\Loader\ArrayLoader;
 use Twig\Loader\FilesystemLoader;
 use Twig\Source;
 
-class ErrorTest extends \PHPUnit\Framework\TestCase
+class ErrorTest extends TestCase
 {
     public function testErrorWithObjectFilename()
     {
@@ -26,14 +27,6 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
         $error->setSourceContext(new Source('', new \SplFileInfo(__FILE__)));
 
         $this->assertStringContainsString('tests'.\DIRECTORY_SEPARATOR.'ErrorTest.php', $error->getMessage());
-    }
-
-    public function testErrorWithArrayFilename()
-    {
-        $error = new Error('foo');
-        $error->setSourceContext(new Source('', ['foo' => 'bar']));
-
-        $this->assertEquals('foo in {"foo":"bar"}', $error->getMessage());
     }
 
     public function testTwigExceptionGuessWithMissingVarAndArrayLoader()
@@ -50,6 +43,7 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
 {% endblock %}
 EOHTML
         ]);
+
         $twig = new Environment($loader, ['strict_variables' => true, 'debug' => true, 'cache' => false]);
 
         $template = $twig->load('index.html');

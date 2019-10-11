@@ -63,7 +63,7 @@ class LoggerChannelPass implements CompilerPassInterface
                 }
                 $definition->setMethodCalls($calls);
 
-                if (!$definition instanceof ChildDefinition && \method_exists($definition, 'getBindings')) {
+                if (\method_exists($definition, 'getBindings')) {
                     $binding = new BoundArgument(new Reference($loggerId));
 
                     // Mark the binding as used already, to avoid reporting it as unused if the service does not use a
@@ -81,6 +81,9 @@ class LoggerChannelPass implements CompilerPassInterface
 
         // create additional channels
         foreach ($container->getParameter('monolog.additional_channels') as $chan) {
+            if ($chan === 'app') {
+                continue;
+            }
             $loggerId = sprintf('monolog.logger.%s', $chan);
             $this->createLogger($chan, $loggerId, $container);
             $container->getDefinition($loggerId)->setPublic(true);
@@ -123,12 +126,7 @@ class LoggerChannelPass implements CompilerPassInterface
     protected function createLogger($channel, $loggerId, ContainerBuilder $container)
     {
         if (!in_array($channel, $this->channels)) {
-            if (class_exists('Symfony\Component\DependencyInjection\ChildDefinition')) {
-                $logger = new ChildDefinition('monolog.logger_prototype');
-            } else {
-                $logger = new DefinitionDecorator('monolog.logger_prototype');
-            }
-
+            $logger = new ChildDefinition('monolog.logger_prototype');
             $logger->replaceArgument(0, $channel);
             $container->setDefinition($loggerId, $logger);
             $this->channels[] = $channel;

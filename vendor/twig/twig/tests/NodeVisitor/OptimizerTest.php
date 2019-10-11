@@ -11,33 +11,38 @@ namespace Twig\Tests\NodeVisitor;
  * file that was distributed with this source code.
  */
 
+use PHPUnit\Framework\TestCase;
 use Twig\Environment;
+use Twig\Loader\LoaderInterface;
+use Twig\Node\Expression\BlockReferenceExpression;
+use Twig\Node\Expression\ParentExpression;
 use Twig\Node\ForNode;
+use Twig\Node\Node;
 use Twig\Source;
 
-class OptimizerTest extends \PHPUnit\Framework\TestCase
+class OptimizerTest extends TestCase
 {
     public function testRenderBlockOptimizer()
     {
-        $env = new Environment($this->createMock('\Twig\Loader\LoaderInterface'), ['cache' => false, 'autoescape' => false]);
+        $env = new Environment($this->createMock(LoaderInterface::class), ['cache' => false, 'autoescape' => false]);
 
         $stream = $env->parse($env->tokenize(new Source('{{ block("foo") }}', 'index')));
 
         $node = $stream->getNode('body')->getNode(0);
 
-        $this->assertInstanceOf('\Twig\Node\Expression\BlockReferenceExpression', $node);
+        $this->assertInstanceOf(BlockReferenceExpression::class, $node);
         $this->assertTrue($node->getAttribute('output'));
     }
 
     public function testRenderParentBlockOptimizer()
     {
-        $env = new Environment($this->createMock('\Twig\Loader\LoaderInterface'), ['cache' => false, 'autoescape' => false]);
+        $env = new Environment($this->createMock(LoaderInterface::class), ['cache' => false, 'autoescape' => false]);
 
         $stream = $env->parse($env->tokenize(new Source('{% extends "foo" %}{% block content %}{{ parent() }}{% endblock %}', 'index')));
 
         $node = $stream->getNode('blocks')->getNode('content')->getNode(0)->getNode('body');
 
-        $this->assertInstanceOf('\Twig\Node\Expression\ParentExpression', $node);
+        $this->assertInstanceOf(ParentExpression::class, $node);
         $this->assertTrue($node->getAttribute('output'));
     }
 
@@ -46,7 +51,7 @@ class OptimizerTest extends \PHPUnit\Framework\TestCase
      */
     public function testForOptimizer($template, $expected)
     {
-        $env = new Environment($this->createMock('\Twig\Loader\LoaderInterface'), ['cache' => false]);
+        $env = new Environment($this->createMock(LoaderInterface::class), ['cache' => false]);
 
         $stream = $env->parse($env->tokenize(new Source($template, 'index')));
 
@@ -94,12 +99,8 @@ class OptimizerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function checkForConfiguration(\Twig_NodeInterface $node = null, $target, $withLoop)
+    public function checkForConfiguration(Node $node, $target, $withLoop)
     {
-        if (null === $node) {
-            return;
-        }
-
         foreach ($node as $n) {
             if ($n instanceof ForNode) {
                 if ($target === $n->getNode('value_target')->getAttribute('name')) {
