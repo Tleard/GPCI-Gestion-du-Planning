@@ -18,14 +18,11 @@ class User extends BaseUser
      */
     protected $id;
 
-    /*
-     * @ORM\ManyToMany(targetEntity="userBundle\Entity\Group")
-     * @ORM\JoinTable(name="group",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="group_id", referencedColumnName="id")}
-     * )
-     *
-    protected $group;*/
+    /**
+     *@ORM\ManyToOne(targetEntity="Client\PlanningBundle\Entity\Groups")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $group;
 
 
     public function __construct()

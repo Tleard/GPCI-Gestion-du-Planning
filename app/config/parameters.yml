@@ -3,10 +3,10 @@ parameters:
     database_host: 127.0.0.1
     database_port: null
     database_name: planning
-    database_user: Belette
-    database_password: Incorrect
+    database_user: Main_user
+    database_password: Chmod777
     mailer_transport: smtp
     mailer_host: 127.0.0.1
-    mailer_user: dylanmartinpro@gmail.com
-    mailer_password: a11101994
+    mailer_user: huxtra@gmail.com
+    mailer_password: Sm@Joad.
     secret: ThisTokenIsNotSoSecretChangeIt
