@@ -29,17 +29,14 @@ class Calendar
     private $date;
 
     /**
-     *
      * @ORM\ManyToOne(targetEntity="Client\PlanningBundle\Entity\Weeks")
      * @ORM\JoinColumn(nullable=true)
-     *
      */
     private $week;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="class", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="Client\PlanningBundle\Entity\Classes")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $class;
 
