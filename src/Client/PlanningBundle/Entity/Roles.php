@@ -5,12 +5,12 @@ namespace Client\PlanningBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Groups
+ * Roles
  *
- * @ORM\Table(name="groups")
- * @ORM\Entity(repositoryClass="Client\PlanningBundle\Repository\GroupsRepository")
+ * @ORM\Table(name="roles")
+ * @ORM\Entity(repositoryClass="Client\PlanningBundle\Repository\RolesRepository")
  */
-class Groups
+class Roles
 {
     /**
      * @var int
@@ -29,11 +29,21 @@ class Groups
     private $name;
 
     /**
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(name="type", type="string", length=255)
+     * @ORM\Column(name="delete_right", type="boolean")
+     * @ORM\JoinColumn(nullable=true)
+     *
      */
-    private $type;
+    private $deleteRight;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="modify_right", type="boolean")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $modifyRight;
 
 
     /**
@@ -51,7 +61,7 @@ class Groups
      *
      * @param string $name
      *
-     * @return Groups
+     * @return Roles
      */
     public function setName($name)
     {
@@ -71,50 +81,50 @@ class Groups
     }
 
     /**
-     * Set type.
+     * Set deleteRight.
      *
-     * @param string $type
+     * @param bool $deleteRight
      *
-     * @return Groups
+     * @return Roles
      */
-    public function setType($type)
+    public function setDeleteRight($deleteRight)
     {
-        $this->type = $type;
+        $this->deleteRight = $deleteRight;
 
         return $this;
     }
 
     /**
-     * Get type.
+     * Get deleteRight.
      *
-     * @return string
+     * @return bool
      */
-    public function getType()
+    public function getDeleteRight()
     {
-        return $this->type;
+        return $this->deleteRight;
     }
 
     /**
-     * Set mail.
+     * Set modifyRight.
      *
-     * @param string $mail
+     * @param bool $modifyRight
      *
-     * @return Groups
+     * @return Roles
      */
-    public function setMail($mail)
+    public function setModifyRight($modifyRight)
     {
-        $this->mail = $mail;
+        $this->modifyRight = $modifyRight;
 
         return $this;
     }
 
     /**
-     * Get mail.
+     * Get modifyRight.
      *
-     * @return string
+     * @return bool
      */
-    public function getMail()
+    public function getModifyRight()
     {
-        return $this->mail;
+        return $this->modifyRight;
     }
 }

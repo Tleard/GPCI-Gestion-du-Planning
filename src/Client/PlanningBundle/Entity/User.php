@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="user")
+ * @ORM\Table(name="users")
  */
 class User extends BaseUser
 {
@@ -19,8 +19,8 @@ class User extends BaseUser
     protected $id;
 
     /**
-     *@ORM\ManyToOne(targetEntity="Client\PlanningBundle\Entity\Groups")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="Client\PlanningBundle\Entity\Groups")
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $group;
 
