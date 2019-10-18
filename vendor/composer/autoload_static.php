@@ -23,6 +23,7 @@ class ComposerStaticInitf4db5974d610c348a6d7a380ed79305c
         'T' => 
         array (
             'Twig\\' => 5,
+            'Toiba\\FullCalendarBundle\\' => 25,
             'Tests\\' => 6,
         ),
         'S' => 
@@ -91,6 +92,10 @@ class ComposerStaticInitf4db5974d610c348a6d7a380ed79305c
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
+        ),
+        'Toiba\\FullCalendarBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/toiba/fullcalendar-bundle',
         ),
         'Tests\\' => 
         array (
